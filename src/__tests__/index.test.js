@@ -7,25 +7,25 @@ dotenv.config()
 
 const request = supertest(app)
 
-describe("Testing the testing environment", () => {
+// describe("Testing the testing environment", () => {
 
-    it("should test that true is true", () => {
-        expect(true).toBe(true);
-    });
+//     it("should test that true is true", () => {
+//         expect(true).toBe(true);
+//     });
 
-    it("should test that false is false", () => {
-        expect(false).toBe(false);
-    });
+//     it("should test that false is false", () => {
+//         expect(false).toBe(false);
+//     });
 
-    it("should test that 1 is 1", () => {
-        expect(1).toBe(1);
-    });
+//     it("should test that 1 is 1", () => {
+//         expect(1).toBe(1);
+//     });
 
-    it("should test that 0 is 0", () => {
-        expect(0).toBe(0);
-    });
+//     it("should test that 0 is 0", () => {
+//         expect(0).toBe(0);
+//     });
 
-})
+// })
 
 describe("Testing the products endpoints", () => {
 
@@ -75,8 +75,38 @@ describe("Testing the products endpoints", () => {
         expect(response.body.some(p => p._id.toString() === productResponse.body.product._id)).toBe(true)
     })
 
+    const mockProduct = {
+    name: "hello",
+    price: 100,
+    _id: "618a910778af8eca64e3c13s",
+  };
 
-    // afterAll 
+  it("should test that a GET /products endpoint is returning a 200", async () => {
+    const response = await request.get("/products/" + mockProduct._id);
+
+    expect(response.status).toBe(200);
+  });
+
+  it("should test that a GET /products endpoint is returning a 404 in case not found", async () => {
+    const response = await request.get("/products/not-existing");
+
+    expect(response.status).toBe(404);
+  });
+
+  it("should test that a PUT /products endpoint is returning a 404 in case not found", async () => {
+    const response = await request.put("/products/not-existing");
+
+    expect(response.status).toBe(404);
+  });
+
+  it("should test that a DELETE /products endpoint is returning a 404 in case not found", async () => {
+    const response = await request.delete("/products/not-existing");
+
+    expect(response.status).toBe(404);
+  });
+
+
+    // afterAll
 
     // We are going to drop the testing database in Mongo
     // We don't need this fake/dummy data anymore because it was just a test

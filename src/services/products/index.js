@@ -26,4 +26,48 @@ productsRouter.post("/", async (req, res) => {
     res.status(201).send({ product });
 })
 
+productsRouter.get("/:id", async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+    if (product) {
+      res.send(product);
+    } else {
+      res.status(404).send("Product not found!");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+productsRouter.put("/:id", async (req, res) => {
+  try {
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (updatedProduct) {
+      res.status(201).send(updatedProduct);
+    } else {
+      res.status(404).send("Product not found!");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+productsRouter.delete("/:id", async (req, res) => {
+  try {
+    const deletedProduct = await ProductModel.findByIdAndDelete(req.params.id);
+    if (deletedProduct) {
+      res.status(204).send();
+    } else {
+      res.status(404).send("Product not found!");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+
 export { productsRouter }
