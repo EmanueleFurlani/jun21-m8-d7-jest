@@ -41,12 +41,12 @@ describe("Testing the products endpoints", () => {
         })
     })
 
-    it("should test that the /test endpoint is returning a success message", async () => {
-        const response = await request.get("/test")
+    // it("should test that the /test endpoint is returning a success message", async () => {
+    //     const response = await request.get("/test")
 
-        expect(response.status).toBe(200)
-        expect(response.body.message).toBe("Test success")
-    })
+    //     expect(response.status).toBe(200)
+    //     expect(response.body.message).toBe("Test success")
+    // })
 
     const validProduct = {
         name: "Test product",
@@ -74,6 +74,28 @@ describe("Testing the products endpoints", () => {
         expect(response.status).toBe(200)
         expect(response.body.some(p => p._id.toString() === productResponse.body.product._id)).toBe(true)
     })
+
+
+
+    it("should test that a GET /products endpoint is returning a valid product", async () => {
+    const response = await request.post("/products").send(validProduct);
+    
+    expect(response.status).toBe(201);
+    expect(response.body).toBeDefined();
+    console.log(response.body)
+    console.log(response.body.product._id)
+    const idResponse = await request.get("/products/" + response.body.product._id);
+    expect(idResponse.body.name).toEqual(validProduct.name);
+  });
+    //   it("should test that a GET /products endpoint is returning a valid product", async () => {
+    //     const response = await request.post('/products').send(validProduct)
+
+    //     expect(response.status).toBe(201)
+    //     expect(response.body._id).toBeDefined()
+
+    //     const idResponse = await request.get('/products/' + response.body._id)
+    //     expect(idResponse.body.name).toEqual(validProduct.name)
+    // })
 
     const mockProduct = {
     name: "hello",
